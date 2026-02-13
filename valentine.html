@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>For My Gundiiii ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: pink;
+    overflow: hidden;
+}
+
+
+
+
+/* Floating hearts */
+.heart{
+position:fixed;
+color:red;
+font-size:20px;
+animation:float 6s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(100vh); opacity:1;}
+100%{transform:translateY(-10vh); opacity:0;}
+}
+
+.box{
+text-align:center;
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 0 20px rgba(0,0,0,0.2);
+
+position: absolute;
+top: 50%;
+left: 50%;
+transform: translate(-50%, -50%);
+
+width: 320px;
+z-index: 10;
+}
+
+
+.hidden{display:none;}
+
+button{
+padding:12px 25px;
+font-size:18px;
+border:none;
+border-radius:10px;
+margin:10px;
+cursor:pointer;
+}
+
+#yesBtn{background:#ff4d6d;color:white;}
+#noBtn{background:grey;color:white;}
+
+.slideshow img{
+width:250px;
+height:300px;
+border-radius:15px;
+object-fit:cover;
+margin-top:15px;
+}
+
+/* Game styling */
+.emoji{
+font-size:40px;
+cursor:pointer;
+margin:10px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- PASSWORD PAGE -->
+<div class="box" id="passwordPage">
+<h2>Only My Bangari Can Enter 🔐</h2>
+<input type="password" id="pass" placeholder="Enter Secret Password">
+<br><br>
+<button onclick="checkPass()">Enter</button>
+</div>
+
+<!-- LOVE QUESTIONS GAME -->
+<div class="box hidden" id="gamePage">
+<h2>Before You Enter My Heart 💌</h2>
+
+<p id="questionText"></p>
+
+<textarea id="answerInput" placeholder="Type your answer here Bangari..." rows="3" style="width:100%; border-radius:10px; padding:10px;"></textarea>
+
+<br><br>
+
+<button onclick="nextQuestion()">Next 💜</button>
+
+</div>
+
+
+<!-- PROPOSAL PAGE -->
+<div class="box hidden" id="mainPage">
+<h1>Hey BANGAARIIII 💗</h1>
+<h2>Will you be my Valentine?</h2>
+
+<div class="slideshow">
+<img id="slide" src="./photo1.jpg">
+</div>
+
+<button id="yesBtn">Yes 💖</button>
+<button id="noBtn">No 🤨</button>
+</div>
+
+<!-- SUCCESS PAGE -->
+<div class="box hidden" id="lovePage">
+<h1>WOOHOOOO BANGAARII 💞🖤</h1>
+<h2>Nanna muddu kulli sundriii     
+I LOVEE YOUUU INFINITELYYY !</h2>
+<p>US, AS ONE... Forever👩‍❤️‍👨</p>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script>
+
+/* PASSWORD */
+function checkPass(){
+let pass=document.getElementById("pass").value;
+
+if(pass==="1857"){
+document.getElementById("passwordPage").classList.add("hidden");
+startGame();
+}
+else alert("Wrong Password nimmajji hattt 🧐");
+}
+
+/* LOVE QUESTION GAME */
+
+const questions = [
+
+"If I gently cup your face, look into your eyes and slowly move closer… what would you do?",
+
+"If I suddenly whisper something mischievous in your ear and refuse to tell you again… how would you react?",
+
+"If we were alone laughing uncontrollably and the world felt paused for a second… what would you do?"
+
+];
+
+let currentQ = 0;
+let userAnswers = [];
+
+function startGame(){
+document.getElementById("gamePage").classList.remove("hidden");
+showQuestion();
+}
+
+function showQuestion(){
+document.getElementById("questionText").innerText = questions[currentQ];
+document.getElementById("answerInput").value="";
+}
+
+function nextQuestion(){
+
+let ans=document.getElementById("answerInput").value;
+
+if(ans.trim()===""){
+alert("You have to answer Gundi 😌");
+return;
+}
+
+userAnswers.push(ans);
+currentQ++;
+
+if(currentQ < questions.length){
+showQuestion();
+}
+else{
+document.getElementById("gamePage").classList.add("hidden");
+document.getElementById("mainPage").classList.remove("hidden");
+}
+}
+
+
+/* SLIDESHOW */const images=[
+"./photo1.jpg",
+"./photo2.jpg",
+"./photo3.jpg"
+];
+let index=0;
+
+setInterval(()=>{
+index=(index+1)%images.length;
+let slide=document.getElementById("slide");
+if(slide) slide.src=images[index];
+},3000);
+
+/* MOVING NO BUTTON */
+const noBtn=document.getElementById("noBtn");
+if(noBtn){
+noBtn.addEventListener("mouseover",()=>{
+const x=Math.random()*200-100;
+const y=Math.random()*200-100;
+noBtn.style.transform=`translate(${x}px,${y}px)`;
+});
+}
+
+/* YES BUTTON */
+const yesBtn=document.getElementById("yesBtn");
+if(yesBtn){
+yesBtn.onclick=()=>{
+
+document.getElementById("mainPage").classList.add("hidden");
+document.getElementById("lovePage").classList.remove("hidden");
+
+alert("MY SUBBII'S ANSWERS ❤️\n\n" + userAnswers.join("\n\n"));
+
+startConfetti();
+};
+}
+
+
+/* CONFETTI */
+const canvas=document.getElementById("confetti");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let confetti=[];
+
+function startConfetti(){
+for(let i=0;i<120;i++){
+confetti.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*6+2,
+color:`hsl(${Math.random()*360},100%,50%)`
+});
+}
+draw();
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+confetti.forEach(c=>{
+ctx.beginPath();
+ctx.fillStyle=c.color;
+ctx.arc(c.x,c.y,c.r,0,Math.PI*2);
+ctx.fill();
+c.y+=2;
+if(c.y>canvas.height)c.y=0;
+});
+requestAnimationFrame(draw);
+}
+
+/* FLOATING HEARTS */
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.innerHTML="❤️";
+heart.classList.add("heart");
+heart.style.left=Math.random()*100+"vw";
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),6000);
+},400);
+
+</script>
+
+</body>
+</html>
